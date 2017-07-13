@@ -8,7 +8,11 @@ Paddle::Paddle(Vec2 & pos_in)
 
 void Paddle::Draw(Graphics & gfx)
 {
-	gfx.DrawRect(GetRect(), color);
+	gfx.DrawRect(GetRect(), wingsColor);
+	RectF inRect = GetRect();
+	inRect.left += wingsWidth;
+	inRect.right -= wingsWidth;
+	gfx.DrawRect(inRect, color);
 }
 
 void Paddle::Update(Keyboard& kbd, float dt)

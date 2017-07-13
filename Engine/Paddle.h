@@ -20,4 +20,6 @@ private:
 	Vec2 pos;
 	const float halfWidth = 50.0f;
 	const float halfHeight = 15.0f;
+	const float wingsWidth = 15.0f;
+	const Color wingsColor = Colors::Red;
 };
