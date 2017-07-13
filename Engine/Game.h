@@ -24,6 +24,7 @@
 #include "Mouse.h"
 #include "Graphics.h"
 #include "Ball.h"
+#include "Brick.h"
 #include "FrameTimer.h"
 #include "Sound.h"
 
@@ -48,6 +49,8 @@ private:
 	/********************************/
 	FrameTimer ft;
 	Ball ball;
+	Brick brick;
 	RectF walls;
 	Sound soundPad;
+	Sound soundBrick;
 };
