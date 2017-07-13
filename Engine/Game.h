@@ -23,10 +23,13 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Graphics.h"
-#include "Ball.h"
-#include "Brick.h"
 #include "FrameTimer.h"
 #include "Sound.h"
+
+#include "Ball.h"
+#include "Brick.h"
+#include "Paddle.h"
+
 
 class Game
 {
@@ -51,6 +54,7 @@ private:
 	Ball ball;
 	Brick brick;
 	RectF walls;
+	Paddle pad;
 	Sound soundPad;
 	Sound soundBrick;
 };
