@@ -11,4 +11,5 @@ public:
 private:
 	RectF rect;
 	Color color;
+	bool destroyed = false;
 };
