@@ -26,7 +26,7 @@ Game::Game( MainWindow& wnd )
 	wnd( wnd ),
 	gfx( wnd ),
 	walls(0.0f, float(gfx.ScreenWidth), 0.0f, float(gfx.ScreenHeight)),
-	ball(Vec2(200.0f, 200.0f), Vec2(300.0f, 300.0f)),
+	ball(Vec2(300.0f + 24.0f, 200.0f), Vec2(-300.0f, -300.0f)),
 	pad(Vec2(gfx.ScreenWidth/2, gfx.ScreenHeight - 100)),
 	soundPad(L"Sounds\\arkpad.wav"),
 	soundBrick(L"Sounds\\arkbrick.wav")
