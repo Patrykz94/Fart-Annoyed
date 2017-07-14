@@ -7,6 +7,7 @@
 class Brick
 {
 public:
+	Brick() = default;
 	Brick(RectF& rect_in, Color color_in);
 	void Draw(Graphics& gfx);
 	bool DoBallCollisions(Ball& ball);
@@ -14,4 +15,5 @@ private:
 	RectF rect;
 	Color color;
 	bool destroyed = false;
+	static constexpr float padding = 2.0f;
 };
