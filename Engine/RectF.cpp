@@ -34,3 +34,8 @@ bool RectF::IsOverlappingWith(const RectF& other) const
 	}
 	return false;
 }
+
+RectF RectF::GetExpanded(float offset) const
+{
+	return RectF(left - offset, right + offset, top - offset, bottom + offset );
+}
