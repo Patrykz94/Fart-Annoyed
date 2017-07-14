@@ -56,6 +56,35 @@ void Game::UpdateModel()
 {
 	const float dt = ft.Mark();
 	ball.Update(dt);
+
+	bool collisionHappened = false;
+	float curColDistSq;
+	int curColIndex;
+	for (int i = 0; i < nBricks; i++)
+	{
+		if (bricks[i].CheckBallCollisions(ball))
+		{
+			const float newColDistSq = (ball.GetPosition() - bricks[i].GetCenter()).GetLengthSq();
+			if (collisionHappened) {
+				if (newColDistSq < curColDistSq)
+				{
+					curColDistSq = newColDistSq;
+					curColIndex = i;
+				}
+			}
+			else
+			{
+				curColDistSq = newColDistSq;
+				curColIndex = i;
+				collisionHappened = true;
+			}
+		}
+	}
+	if (collisionHappened) {
+		bricks[curColIndex].ExecuteBallCollisions(ball);
+		soundBrick.Play();
+	}
+
 	pad.Update(wnd.kbd, dt);
 	pad.DoWallCollisions(walls);
 	if (pad.DoBallCollisions(ball))
@@ -65,13 +94,6 @@ void Game::UpdateModel()
 	if (ball.DoWallCollisons(walls))
 	{
 		soundPad.Play();
-	}
-	for (Brick& b : bricks)
-	{
-		if (b.DoBallCollisions(ball))
-		{
-			soundBrick.Play();
-		}
 	}
 }
 
