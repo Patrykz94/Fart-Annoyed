@@ -27,11 +27,30 @@ void Paddle::Update(Keyboard& kbd, float dt)
 
 bool Paddle::DoBallCollisions(Ball & ball)
 {
-	if (GetRect().IsOverlappingWith(ball.GetRect()))
+	const RectF rect = GetRect();
+	if (rect.IsOverlappingWith(ball.GetRect()))
 	{
-		ball.ReboundY();
-		return true;
+		if (!isCooldown) {
+			const Vec2 ballPos = ball.GetPosition();
+			const Vec2 ballDir = pos - ballPos;
+			if (std::signbit(ball.GetVelocity().x) == std::signbit((ballPos - pos).x))
+			{
+				ball.ReboundPad(ballDir);
+			}
+			else if (ballPos.x >= rect.left && ballPos.x <= rect.right)
+			{
+				ball.ReboundPad(ballDir);
+			}
+			else
+			{
+				ball.ReboundX();
+			}
+			isCooldown = true;
+			return true;
+		}
+		return false;
 	}
+	isCooldown = false;
 	return false;
 }
 

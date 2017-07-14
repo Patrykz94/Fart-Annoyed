@@ -49,6 +49,12 @@ bool Ball::DoWallCollisons(RectF & walls)
 	return collided;
 }
 
+void Ball::ReboundPad(const Vec2 & padDir)
+{
+	float speed = vel.GetLength();
+	vel = -padDir.GetNormalized() * speed;
+}
+
 void Ball::ReboundX()
 {
 	vel.x = -vel.x;

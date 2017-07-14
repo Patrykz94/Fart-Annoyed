@@ -22,4 +22,5 @@ private:
 	const float halfHeight = 15.0f;
 	const float wingsWidth = 15.0f;
 	const Color wingsColor = Colors::Red;
+	bool isCooldown = false;
 };

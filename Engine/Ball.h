@@ -11,6 +11,7 @@ public:
 	void Draw(Graphics& gfx);
 	void Update(float dt);
 	bool DoWallCollisons(RectF& walls);
+	void ReboundPad(const Vec2& padDir);
 	void ReboundX();
 	void ReboundY();
 	RectF GetRect();
