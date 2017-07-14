@@ -25,8 +25,11 @@ void Brick::ExecuteBallCollisions(Ball & ball)
 {
 	assert(CheckBallCollisions(ball));
 	const Vec2 ballPos = ball.GetPosition();
-	destroyed = true;
-	if (ballPos.x >= rect.left && ballPos.x <= rect.right)
+	if (std::signbit(ball.GetVelocity().x) == std::signbit((ballPos - GetCenter()).x))
+	{
+		ball.ReboundY();
+	}
+	else if (ballPos.x >= rect.left && ballPos.x <= rect.right)
 	{
 		ball.ReboundY();
 	}
@@ -34,6 +37,7 @@ void Brick::ExecuteBallCollisions(Ball & ball)
 	{
 		ball.ReboundX();
 	}
+	destroyed = true;
 }
 
 Vec2 Brick::GetCenter() const
