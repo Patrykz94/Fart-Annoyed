@@ -25,6 +25,7 @@
 #include "Graphics.h"
 #include "FrameTimer.h"
 #include "Sound.h"
+#include "SpriteCodex.h"
 
 #include "Ball.h"
 #include "Brick.h"
@@ -50,12 +51,13 @@ private:
 	/********************************/
 	/*  User Variables              */
 	/********************************/
-	static constexpr float brickWidth = 60.0f;
-	static constexpr float brickHeight = 30.0f;
-	static constexpr int horizontalBricks = 12;
-	static constexpr int verticalBricks = 4;
+	static constexpr float brickWidth = 45.0f;
+	static constexpr float brickHeight = 25.0f;
+	static constexpr int horizontalBricks = 13;
+	static constexpr int verticalBricks = 5;
 	static constexpr int nBricks = horizontalBricks * verticalBricks;
-	Vec2 topPos = Vec2(40.0f, 40.0f);
+	Vec2 playArea = Vec2(585.0f, 570.0f);
+	Vec2 topPos = Vec2(0.0f, 100.0f);
 	FrameTimer ft;
 	Ball ball;
 	Brick bricks[nBricks];
@@ -63,4 +65,5 @@ private:
 	Paddle pad;
 	Sound soundPad;
 	Sound soundBrick;
+	bool gameOver;
 };
