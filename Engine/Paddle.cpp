@@ -70,3 +70,8 @@ RectF Paddle::GetRect()
 {
 	return RectF::FromCenter(pos, halfWidth, halfHeight);
 }
+
+void Paddle::Reset(Vec2 & pos_in)
+{
+	pos = pos_in;
+}

@@ -14,6 +14,7 @@ public:
 	bool DoBallCollisions(Ball& ball);
 	void DoWallCollisions(RectF& walls);
 	RectF GetRect();
+	void Reset(Vec2& pos_in);
 private:
 	const Color color = Colors::White;
 	const float speed = 300.0f;

@@ -15,6 +15,7 @@ void Ball::Draw(Graphics & gfx)
 void Ball::Update(float dt)
 {
 	pos += vel * dt;
+	hitBottom = false;
 }
 
 bool Ball::DoWallCollisons(RectF & walls)
@@ -83,4 +84,10 @@ Vec2 Ball::GetPosition()
 bool Ball::HitBottomWall()
 {
 	return hitBottom;
+}
+
+void Ball::Reset(Vec2 & pos_in, Vec2 & vel_in)
+{
+	pos = pos_in;
+	vel = vel_in;
 }

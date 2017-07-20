@@ -18,6 +18,8 @@ public:
 	Vec2 GetVelocity();
 	Vec2 GetPosition();
 	bool HitBottomWall();
+	void Reset(Vec2& pos_in, Vec2& vel_in);
+
 private:
 	bool hitBottom = false;
 	static constexpr float radius = 7.0f;
