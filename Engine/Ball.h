@@ -19,6 +19,7 @@ public:
 	Vec2 GetPosition();
 private:
 	static constexpr float radius = 7.0f;
+	const float speed = 400.0f;
 	Vec2 pos;
 	Vec2 vel;
 };
