@@ -65,5 +65,7 @@ private:
 	Paddle pad;
 	Sound soundPad;
 	Sound soundBrick;
+	bool dead;
 	bool gameOver;
+	int lives;
 };

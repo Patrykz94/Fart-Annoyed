@@ -30,7 +30,9 @@ Game::Game(MainWindow& wnd)
 	ball(Vec2(gfx.ScreenWidth / 2, gfx.ScreenHeight - 150), Vec2(5.0f, 100.0f)),
 	soundPad(L"Sounds\\arkpad.wav"),
 	soundBrick(L"Sounds\\arkbrick.wav"),
-	gameOver(false)
+	dead(false),
+	gameOver(false),
+	lives(3)
 {
 	Color c[5] = { Colors::Gray, Colors::Blue, Colors::Green, Colors::Red, Colors::Yellow };
 
@@ -63,7 +65,31 @@ void Game::UpdateModel( float dt)
 {
 	if (gameOver)
 	{
-		SpriteCodex::DrawGameOver( Vec2(gfx.ScreenWidth/2, gfx.ScreenHeight/2),gfx);
+		SpriteCodex::DrawGameOver(Vec2(gfx.ScreenWidth/2, gfx.ScreenHeight/2),gfx);
+	}
+	else if (dead)
+	{
+		SpriteCodex::DrawDead(Vec2(gfx.ScreenWidth / 2, gfx.ScreenHeight / 2), gfx);
+		if (wnd.kbd.KeyIsPressed(VK_RETURN))
+		{
+			lives--;
+			pad.Reset(Vec2(gfx.ScreenWidth / 2, gfx.ScreenHeight - 50));
+			ball.Reset(Vec2(gfx.ScreenWidth / 2, gfx.ScreenHeight - 150), Vec2(5.0f, 100.0f));
+
+			Color c[5] = { Colors::Gray, Colors::Blue, Colors::Green, Colors::Red, Colors::Yellow };
+
+			int i = 0;
+			for (int y = 0; y < verticalBricks; y++)
+			{
+				for (int x = 0; x < horizontalBricks; x++)
+				{
+					bricks[i] = Brick(RectF(walls.GetTopLeft() + topPos + Vec2(x * brickWidth, y * brickHeight), brickWidth, brickHeight), c[y]);
+					i++;
+				}
+			}
+
+			dead = false;
+		}
 	}
 	else
 	{
@@ -108,7 +134,14 @@ void Game::UpdateModel( float dt)
 		{
 			if (ball.HitBottomWall())
 			{
-				gameOver = true;
+				if (lives > 1)
+				{
+					dead = true;
+				}
+				else
+				{
+					gameOver = true;
+				}
 			}
 			else
 			{
@@ -121,6 +154,10 @@ void Game::UpdateModel( float dt)
 
 void Game::ComposeFrame()
 {
+	for (int i = 0; i < lives; i++)
+	{
+		SpriteCodex::DrawHeart(Vec2(10.0f, 10.0f + i * 40.0f), gfx);
+	}
 	gfx.DrawBorder(walls, 15, Colors::MakeRGB(211, 211, 211));
 	for (Brick b : bricks)
 	{
