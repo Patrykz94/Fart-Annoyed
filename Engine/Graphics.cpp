@@ -336,6 +336,38 @@ void Graphics::DrawRect( int x0,int y0,int x1,int y1,Color c )
 	}
 }
 
+void Graphics::DrawBorder(int x0, int y0, int x1, int y1, int thickness, Color c)
+{
+	if (x0 > x1)
+	{
+		std::swap(x0, x1);
+	}
+	if (y0> y1)
+	{
+		std::swap(y0, y1);
+	}
+
+	if (thickness < 0)
+	{
+		thickness = -thickness;
+		x0 += thickness;
+		x1 -= thickness;
+		y0 += thickness;
+		y1 -= thickness;
+	}
+
+	for (int y = y0 - thickness; y < y1 + thickness; ++y)
+	{
+		for (int x = x0 - thickness; x < x1 + thickness; ++x)
+		{
+			if ((y < y0 || y >= y1) || (x < x0 || x >= x1))
+			{
+				PutPixel(x, y, c);
+			}
+		}
+	}
+}
+
 void Graphics::DrawCircle( int x,int y,int radius,Color c )
 {
 	const int rad_sq = radius * radius;

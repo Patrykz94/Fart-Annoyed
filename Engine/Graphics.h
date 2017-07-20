@@ -62,6 +62,11 @@ public:
 	{
 		DrawRect( int(rect.left), int(rect.top), int(rect.right), int(rect.bottom), c);
 	}
+	void DrawBorder(int x0, int y0, int x1, int y1, int thickness, Color c);
+	void DrawBorder(const RectF& rect, int thickness, Color c)
+	{
+		DrawBorder(int(rect.left), int(rect.top), int(rect.right), int(rect.bottom), thickness, c);
+	}
 	void DrawCircle( int x,int y,int radius,Color c );
 	~Graphics();
 private:
