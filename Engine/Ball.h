@@ -17,7 +17,9 @@ public:
 	RectF GetRect();
 	Vec2 GetVelocity();
 	Vec2 GetPosition();
+	bool HitBottomWall();
 private:
+	bool hitBottom = false;
 	static constexpr float radius = 7.0f;
 	const float speed = 400.0f;
 	Vec2 pos;

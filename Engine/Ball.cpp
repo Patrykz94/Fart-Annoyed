@@ -44,6 +44,7 @@ bool Ball::DoWallCollisons(RectF & walls)
 		pos.y -= GetRect().bottom - walls.bottom;
 		ReboundY();
 		collided = true;
+		hitBottom = true;
 	}
 
 	return collided;
@@ -77,4 +78,9 @@ Vec2 Ball::GetVelocity()
 Vec2 Ball::GetPosition()
 {
 	return pos;
+}
+
+bool Ball::HitBottomWall()
+{
+	return hitBottom;
 }
