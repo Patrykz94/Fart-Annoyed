@@ -44,3 +44,8 @@ Vec2 RectF::GetCenter() const
 {
 	return Vec2((left + right)/2.0f, (top + bottom)/2.0f);
 }
+
+Vec2 RectF::GetTopLeft() const
+{
+	return Vec2(left, top);
+}
