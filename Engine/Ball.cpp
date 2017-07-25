@@ -86,8 +86,19 @@ bool Ball::HitBottomWall()
 	return hitBottom;
 }
 
-void Ball::Reset(Vec2 & pos_in, Vec2 & vel_in)
+void Ball::Reset(const Vec2 & pos_in, const Vec2 & vel_in)
 {
 	pos = pos_in;
 	vel = vel_in;
+}
+
+void Ball::StickToPad(const Vec2 & padVel)
+{
+	vel = padVel;
+	pos += vel;
+}
+
+void Ball::SpeedUp()
+{
+	speed += 1.0f;
 }
