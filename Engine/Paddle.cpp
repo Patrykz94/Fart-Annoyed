@@ -17,6 +17,7 @@ void Paddle::Draw(Graphics & gfx)
 
 void Paddle::Update(Keyboard& kbd, float dt)
 {
+	oldPos = pos;
 	if (kbd.KeyIsPressed(VK_LEFT)) {
 		pos.x -= speed * dt;
 	}
@@ -74,4 +75,15 @@ RectF Paddle::GetRect()
 void Paddle::Reset(Vec2 & pos_in)
 {
 	pos = pos_in;
+	oldPos = pos;
+}
+
+Vec2 Paddle::GetBallStartPos() const
+{
+	return pos + Vec2(halfWidth/3, -halfHeight - 6);
+}
+
+Vec2 Paddle::GetVelocity() const
+{
+	return pos - oldPos;
 }

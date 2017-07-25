@@ -15,10 +15,13 @@ public:
 	void DoWallCollisions(RectF& walls);
 	RectF GetRect();
 	void Reset(Vec2& pos_in);
+	Vec2 GetBallStartPos() const;
+	Vec2 GetVelocity() const;
 private:
 	const Color color = Colors::White;
-	const float speed = 300.0f;
+	const float speed = 500.0f;
 	Vec2 pos;
+	Vec2 oldPos;
 	const float halfWidth = 45.0f;
 	const float halfHeight = 10.0f;
 	const float wingsWidth = 10.0f;
