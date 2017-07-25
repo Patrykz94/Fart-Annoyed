@@ -60,6 +60,8 @@ private:
 	int playAreaBorder = 15;
 	Vec2 topPos = Vec2(0.0f, 100.0f);
 	Vec2 screenCenter = Vec2(gfx.ScreenWidth/2, gfx.ScreenHeight/2);
+	Vec2 levelTextPos = screenCenter - Vec2(40.0f, -7.0f);
+	Vec2 levelNumPos = levelTextPos + Vec2(65.0f, 0.0f);
 	FrameTimer ft;
 	Ball ball;
 	Brick bricks[nBricks];
@@ -73,4 +75,5 @@ private:
 	bool levelStarted;
 	int lives;
 	int score;
+	int level;
 };
