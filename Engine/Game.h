@@ -57,7 +57,9 @@ private:
 	static constexpr int verticalBricks = 5;
 	static constexpr int nBricks = horizontalBricks * verticalBricks;
 	Vec2 playArea = Vec2(585.0f, 570.0f);
+	int playAreaBorder = 15;
 	Vec2 topPos = Vec2(0.0f, 100.0f);
+	Vec2 screenCenter = Vec2(gfx.ScreenWidth/2, gfx.ScreenHeight/2);
 	FrameTimer ft;
 	Ball ball;
 	Brick bricks[nBricks];
@@ -67,5 +69,8 @@ private:
 	Sound soundBrick;
 	bool dead;
 	bool gameOver;
+	bool gameStarted;
+	bool levelStarted;
 	int lives;
+	int score;
 };
