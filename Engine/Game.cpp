@@ -187,7 +187,7 @@ void Game::ComposeFrame()
 {
 	for (int i = 0; i < lives; i++)
 	{
-		SpriteCodex::DrawHeart(Vec2(10.0f, 10.0f + i * 40.0f), gfx);
+		SpriteCodex::DrawHeart(Vec2(walls.GetTopLeft().x - playAreaBorder - 30.0f, 10.0f + i * 35.0f), gfx);
 	}
 	gfx.DrawBorder(walls, playAreaBorder, Colors::MakeRGB(211, 211, 211));
 	
