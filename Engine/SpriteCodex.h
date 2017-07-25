@@ -12,8 +12,9 @@ public:
 	static void DrawTitle(const Vec2& center, Graphics& gfx);
 	static void DrawGameOver(const Vec2& center, Graphics& gfx);
 	static void DrawHeart(const Vec2& topLeft, Graphics& gfx);
+	static void DrawTextLevel(const Vec2& topLeft, Graphics& gfx);
 	static void DrawTextScore(const Vec2& topLeft, Graphics& gfx);
-	static void DrawNumberScore(const Vec2& topLeft, Graphics& gfx, const int& score);
+	static void DrawNumber(const Vec2& topLeft, Graphics& gfx, const int number, const int lenght = 0);
 
 	// drawing number sprites 14px x 14px
 	static void DrawNumber0(const Vec2& topLeft, Graphics& gfx);
