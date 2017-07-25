@@ -100,5 +100,5 @@ void Ball::StickToPad(const Vec2 & padVel)
 
 void Ball::SpeedUp()
 {
-	speed += 1.0f;
+	speed += 0.5f;
 }
