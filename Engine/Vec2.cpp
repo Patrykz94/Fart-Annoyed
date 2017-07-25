@@ -46,6 +46,30 @@ Vec2& Vec2::operator-=( const Vec2& rhs )
 	return *this = *this - rhs;
 }
 
+bool Vec2::operator==(const Vec2 & rhs) const
+{
+	if (x == rhs.x && y == rhs.y)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool Vec2::operator!=(const Vec2 & rhs) const
+{
+	if (x == rhs.x && y == rhs.y)
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}
+
 float Vec2::GetLength() const
 {
 	return std::sqrt( GetLengthSq() );
