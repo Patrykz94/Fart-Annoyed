@@ -33,7 +33,8 @@ bool Paddle::DoBallCollisions(Ball & ball)
 	{
 		if (!isCooldown) {
 			const Vec2 ballPos = ball.GetPosition();
-			const Vec2 ballDir = pos - ballPos;
+			Vec2 ballDir = pos - ballPos;
+			ballDir.x = min(halfWidth, max(-halfWidth, ballDir.x));
 			if (std::signbit(ball.GetVelocity().x) == std::signbit((ballPos - pos).x))
 			{
 				ball.ReboundPad(ballDir);
