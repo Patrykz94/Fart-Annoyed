@@ -3,6 +3,7 @@
 #include "Colors.h"
 #include "Graphics.h"
 #include "Ball.h"
+#include "Beveler.h"
 
 class Brick
 {
@@ -17,6 +18,8 @@ public:
 private:
 	RectF rect;
 	Color color;
+	Beveler bevel;
 	bool destroyed = false;
-	static constexpr float padding = 2.0f;
+	static constexpr float padding = 0.5f;
+	static constexpr int bevelSize = 3;
 };
