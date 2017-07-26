@@ -72,8 +72,10 @@ private:
 	bool dead;
 	bool gameOver;
 	bool gameStarted;
+	bool gamePaused;
 	bool levelStarted;
 	int lives;
 	int score;
 	int level;
+	bool escReleased;
 };

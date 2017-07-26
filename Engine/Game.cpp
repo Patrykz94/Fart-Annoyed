@@ -25,7 +25,7 @@ Game::Game(MainWindow& wnd)
 	:
 	wnd(wnd),
 	gfx(wnd),
-	walls((float(gfx.ScreenWidth) - playArea.x) /2, float(gfx.ScreenWidth) - (float(gfx.ScreenWidth) - playArea.x) / 2, (float(gfx.ScreenHeight) - playArea.y) / 2, float(gfx.ScreenHeight) - (float(gfx.ScreenHeight) - playArea.y) / 2),
+	walls((float(gfx.ScreenWidth) - playArea.x) / 2, float(gfx.ScreenWidth) - (float(gfx.ScreenWidth) - playArea.x) / 2, (float(gfx.ScreenHeight) - playArea.y) / 2, float(gfx.ScreenHeight) - (float(gfx.ScreenHeight) - playArea.y) / 2),
 	pad(Vec2(screenCenter.x, gfx.ScreenHeight - 50)),
 	ball(Vec2(screenCenter.x + 20, gfx.ScreenHeight - 66), Vec2(0.0f, 0.0f)),
 	soundPad(L"Sounds\\arkpad.wav"),
@@ -33,10 +33,12 @@ Game::Game(MainWindow& wnd)
 	dead(false),
 	gameOver(false),
 	gameStarted(false),
+	gamePaused(false),
 	levelStarted(false),
 	lives(3),
 	score(0),
-	level(1)
+	level(1),
+	escReleased(true)
 {
 	Color c[5] = { Colors::Gray, Colors::Blue, Colors::Green, Colors::Red, Colors::Yellow };
 
@@ -65,152 +67,167 @@ void Game::Go()
 	gfx.EndFrame();
 }
 
-void Game::UpdateModel( float dt)
+void Game::UpdateModel(float dt)
 {
 
-	if (gameOver)
+	if (!gameOver)
 	{
-		SpriteCodex::DrawGameOver(screenCenter,gfx);
-		SpriteCodex::DrawTextScore(levelTextPos + Vec2(-20.0f, 45.0f), gfx);
-		SpriteCodex::DrawNumber(levelNumPos + Vec2(-15.0f, 45.0f), gfx, score);
-	}
-	else if (dead)
-	{
-		SpriteCodex::DrawDead(screenCenter, gfx);
-		if (wnd.kbd.KeyIsPressed(VK_RETURN))
+		if (dead)
 		{
-			lives--;
-			pad.Reset(Vec2(screenCenter.x, gfx.ScreenHeight - 50));
-			ball.Reset(pad.GetBallStartPos(), Vec2(0.0f, 0.0f));
-
-			dead = false;
-		}
-	}
-	else if (gameStarted)
-	{
-		pad.Update(wnd.kbd, dt);
-		pad.DoWallCollisions(walls);
-
-		if (levelStarted)
-		{
-			ball.Update(dt);
-
-			bool collisionHappened = false;
-			float curColDistSq;
-			int curColIndex;
-			bool bricksRemaining = false;
-			for (int i = 0; i < nBricks; i++)
+			if (wnd.kbd.KeyIsPressed(VK_RETURN))
 			{
-				if (bricks[i].CheckBallCollisions(ball))
+				lives--;
+				pad.Reset(Vec2(screenCenter.x, gfx.ScreenHeight - 50));
+				ball.Reset(pad.GetBallStartPos(), Vec2(0.0f, 0.0f));
+
+				dead = false;
+			}
+		}
+		else if (gameStarted)
+		{
+			if (gamePaused)
+			{
+				if (escReleased && wnd.kbd.KeyIsPressed(VK_ESCAPE))
 				{
-					const float newColDistSq = (ball.GetPosition() - bricks[i].GetCenter()).GetLengthSq();
-					if (collisionHappened) {
-						if (newColDistSq < curColDistSq)
+					gamePaused = false;
+					escReleased = false;
+				}
+			}
+			else if (!gamePaused)
+			{
+				if (escReleased && wnd.kbd.KeyIsPressed(VK_ESCAPE))
+				{
+					gamePaused = true;
+					escReleased = false;
+				}
+
+				pad.Update(wnd.kbd, dt);
+				pad.DoWallCollisions(walls);
+
+				if (levelStarted)
+				{
+					ball.Update(dt);
+
+					bool collisionHappened = false;
+					float curColDistSq;
+					int curColIndex;
+					bool bricksRemaining = false;
+					for (int i = 0; i < nBricks; i++)
+					{
+						if (bricks[i].CheckBallCollisions(ball))
 						{
-							curColDistSq = newColDistSq;
-							curColIndex = i;
+							const float newColDistSq = (ball.GetPosition() - bricks[i].GetCenter()).GetLengthSq();
+							if (collisionHappened) {
+								if (newColDistSq < curColDistSq)
+								{
+									curColDistSq = newColDistSq;
+									curColIndex = i;
+								}
+							}
+							else
+							{
+								curColDistSq = newColDistSq;
+								curColIndex = i;
+								collisionHappened = true;
+							}
+						}
+						if (!bricks[i].IsDestroyed())
+						{
+							bricksRemaining = true;
 						}
 					}
-					else
-					{
-						curColDistSq = newColDistSq;
-						curColIndex = i;
-						collisionHappened = true;
-					}
-				}
-				if (!bricks[i].IsDestroyed())
-				{
-					bricksRemaining = true;
-				}
-			}
-			
-			if (collisionHappened) {
-				bricks[curColIndex].ExecuteBallCollisions(ball);
-				ball.SpeedUp();
-				soundBrick.Play();
-				score += 50 * level;
-			}
 
-			if (pad.DoBallCollisions(ball))
-			{
-				soundPad.Play();
-			}
-			if (ball.DoWallCollisons(walls))
-			{
-				if (ball.HitBottomWall())
-				{
-					if (lives > 1)
-					{
-						dead = true;
-						levelStarted = false;
+					if (collisionHappened) {
+						bricks[curColIndex].ExecuteBallCollisions(ball);
+						ball.SpeedUp();
+						soundBrick.Play();
+						score += 50 * level;
 					}
-					else
+
+					if (pad.DoBallCollisions(ball))
 					{
-						gameOver = true;
-						lives--;
+						soundPad.Play();
+					}
+					if (ball.DoWallCollisons(walls))
+					{
+						if (ball.HitBottomWall())
+						{
+							if (lives > 1)
+							{
+								dead = true;
+								levelStarted = false;
+							}
+							else
+							{
+								gameOver = true;
+								lives--;
+							}
+						}
+						else
+						{
+							soundPad.Play();
+						}
+					}
+
+					if (!bricksRemaining)
+					{
+						level++;
+						levelStarted = false;
+
+						pad.Reset(Vec2(screenCenter.x, gfx.ScreenHeight - 50));
+						ball.Reset(pad.GetBallStartPos(), Vec2(0.0f, 0.0f));
+
+						// Code for resetting the blocks
+						Color c[5] = { Colors::Gray, Colors::Blue, Colors::Green, Colors::Red, Colors::Yellow };
+
+						int i = 0;
+						for (int y = 0; y < verticalBricks; y++)
+						{
+							for (int x = 0; x < horizontalBricks; x++)
+							{
+								bricks[i] = Brick(RectF(walls.GetTopLeft() + topPos + Vec2(x * brickWidth, y * brickHeight), brickWidth, brickHeight), c[y]);
+								i++;
+							}
+						}
 					}
 				}
 				else
 				{
-					soundPad.Play();
+					ball.StickToPad(pad.GetVelocity());
+
+					if (wnd.kbd.KeyIsPressed(VK_SPACE))
+					{
+						levelStarted = true;
+					}
 				}
 			}
 
-			if (!bricksRemaining)
+			if (!wnd.kbd.KeyIsPressed(VK_ESCAPE))
 			{
-				level++;
-				levelStarted = false;
-
-				pad.Reset(Vec2(screenCenter.x, gfx.ScreenHeight - 50));
-				ball.Reset(pad.GetBallStartPos(), Vec2(0.0f, 0.0f));
-
-				// Code for resetting the blocks
-				Color c[5] = { Colors::Gray, Colors::Blue, Colors::Green, Colors::Red, Colors::Yellow };
-
-				int i = 0;
-				for (int y = 0; y < verticalBricks; y++)
-				{
-					for (int x = 0; x < horizontalBricks; x++)
-					{
-						bricks[i] = Brick(RectF(walls.GetTopLeft() + topPos + Vec2(x * brickWidth, y * brickHeight), brickWidth, brickHeight), c[y]);
-						i++;
-					}
-				}
+				escReleased = true;
 			}
 		}
 		else
 		{
-			ball.StickToPad(pad.GetVelocity());
-			
-			SpriteCodex::DrawTextLevel(levelTextPos, gfx);
-			SpriteCodex::DrawNumber(levelNumPos, gfx, level);
-
-			if (wnd.kbd.KeyIsPressed(VK_SPACE))
+			// Game not started yet. Wait for user input
+			if (wnd.kbd.KeyIsPressed(VK_RETURN))
 			{
-				levelStarted = true;
+				gameStarted = true;
 			}
 		}
 
 	}
-	else
-	{
-		// Game not started yet. Draw title screen and wait for user input
-		SpriteCodex::DrawTitle(screenCenter, gfx);
-		if (wnd.kbd.KeyIsPressed(VK_RETURN))
-		{
-			gameStarted = true;
-		}
-	}
-
 }
 
 void Game::ComposeFrame()
 {
+
+	gfx.DrawBorder(walls, playAreaBorder, Colors::MakeRGB(211, 211, 211));
+
 	for (int i = 0; i < lives; i++)
 	{
 		SpriteCodex::DrawHeart(Vec2(walls.GetTopLeft().x - playAreaBorder - 30.0f, 10.0f + i * 35.0f), gfx);
 	}
-	gfx.DrawBorder(walls, playAreaBorder, Colors::MakeRGB(211, 211, 211));
 	
 	// drawing the score
 	SpriteCodex::DrawTextScore(Vec2(walls.GetTopLeft().x + playArea.x + playAreaBorder + 5, 10.0f), gfx);
@@ -221,7 +238,48 @@ void Game::ComposeFrame()
 	{
 		b.Draw(gfx);
 	}
-	pad.Draw(gfx);
-	ball.Draw(gfx);
 	
+	if (gameOver)
+	{
+		// drawing game over screen
+		SpriteCodex::DrawGameOver(screenCenter, gfx);
+		SpriteCodex::DrawTextScore(levelTextPos + Vec2(-20.0f, 45.0f), gfx);
+		SpriteCodex::DrawNumber(levelNumPos + Vec2(-15.0f, 45.0f), gfx, score);
+	}
+	else
+	{
+		if (dead)
+		{
+			// drawing dead screen
+			SpriteCodex::DrawDead(screenCenter, gfx);
+		}
+		else if (gameStarted)
+		{
+			if (!levelStarted)
+			{
+				// drawing next level screen
+				SpriteCodex::DrawTextLevel(levelTextPos, gfx);
+				SpriteCodex::DrawNumber(levelNumPos, gfx, level);
+			}
+		}
+		else
+		{
+			// drawing title screen
+			SpriteCodex::DrawTitle(screenCenter, gfx);
+		}
+
+		if (gameStarted)
+		{
+			// drawing ball and pad
+			pad.Draw(gfx);
+			ball.Draw(gfx);
+
+			if (gamePaused)
+			{
+				// drawing paused message
+				SpriteCodex::DrawTextPaused(screenCenter, gfx);
+			}
+		}
+	}
+
 }
