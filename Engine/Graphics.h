@@ -68,6 +68,11 @@ public:
 		DrawBorder(int(rect.left), int(rect.top), int(rect.right), int(rect.bottom), thickness, c);
 	}
 	void DrawCircle( int x,int y,int radius,Color c );
+	// drawing triangles (for beveling)
+	void DrawIsoRightTriUL(int x, int y, int size, Color c);
+	void DrawIsoRightTriUR(int x, int y, int size, Color c);
+	void DrawIsoRightTriBL(int x, int y, int size, Color c);
+	void DrawIsoRightTriBR(int x, int y, int size, Color c);
 	~Graphics();
 private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain>				pSwapChain;
