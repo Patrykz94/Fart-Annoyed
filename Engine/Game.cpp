@@ -40,7 +40,7 @@ Game::Game(MainWindow& wnd)
 	level(1),
 	escReleased(true)
 {
-	Color c[5] = { Colors::Gray, Colors::Blue, Colors::Green, Colors::Red, Colors::Yellow };
+	Color c[5] = { {140,140,140}, {0,0,230}, {0,230,0}, {230,0,0}, {230,230,0} };
 
 	int i = 0;
 	for (int y = 0; y < verticalBricks; y++)
@@ -222,16 +222,16 @@ void Game::UpdateModel(float dt)
 void Game::ComposeFrame()
 {
 
-	gfx.DrawBorder(walls, playAreaBorder, Colors::MakeRGB(211, 211, 211));
+	frame.DrawBevelFrame(walls.GetExpanded(float(playAreaBorder)*2), playAreaBorder, gfx);
 
 	for (int i = 0; i < lives; i++)
 	{
-		SpriteCodex::DrawHeart(Vec2(walls.GetTopLeft().x - playAreaBorder - 30.0f, 10.0f + i * 35.0f), gfx);
+		SpriteCodex::DrawHeart(Vec2(walls.GetTopLeft().x - playAreaBorder * 2 - 30.0f, 10.0f + i * 35.0f), gfx);
 	}
 	
 	// drawing the score
-	SpriteCodex::DrawTextScore(Vec2(walls.GetTopLeft().x + playArea.x + playAreaBorder + 5, 10.0f), gfx);
-	SpriteCodex::DrawNumber(Vec2(walls.GetTopLeft().x + playArea.x + playAreaBorder + 5, 30.0f), gfx, score, 6);
+	SpriteCodex::DrawTextScore(Vec2(walls.GetTopLeft().x + playArea.x + playAreaBorder * 2 + 5, 10.0f), gfx);
+	SpriteCodex::DrawNumber(Vec2(walls.GetTopLeft().x + playArea.x + playAreaBorder * 2 + 5, 30.0f), gfx, score, 6);
 
 	// drawing game objects
 	for (Brick b : bricks)

@@ -26,6 +26,7 @@
 #include "FrameTimer.h"
 #include "Sound.h"
 #include "SpriteCodex.h"
+#include "Beveler.h"
 
 #include "Ball.h"
 #include "Brick.h"
@@ -53,16 +54,17 @@ private:
 	/********************************/
 	static constexpr float brickWidth = 45.0f;
 	static constexpr float brickHeight = 25.0f;
-	static constexpr int horizontalBricks = 13;
+	static constexpr int horizontalBricks = 12;
 	static constexpr int verticalBricks = 5;
 	static constexpr int nBricks = horizontalBricks * verticalBricks;
-	Vec2 playArea = Vec2(585.0f, 570.0f);
-	int playAreaBorder = 15;
+	Vec2 playArea = Vec2(540.0f, 560.0f);
+	int playAreaBorder = 10;
 	Vec2 topPos = Vec2(0.0f, 100.0f);
 	Vec2 screenCenter = Vec2(gfx.ScreenWidth/2, gfx.ScreenHeight/2);
 	Vec2 levelTextPos = screenCenter - Vec2(40.0f, -7.0f);
 	Vec2 levelNumPos = levelTextPos + Vec2(65.0f, 0.0f);
 	FrameTimer ft;
+	Beveler frame = Colors::MakeRGB(30, 0, 200);
 	Ball ball;
 	Brick bricks[nBricks];
 	RectF walls;
