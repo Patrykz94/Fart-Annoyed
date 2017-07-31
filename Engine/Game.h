@@ -46,6 +46,7 @@ private:
 	/********************************/
 	/*  User Functions              */
 	/********************************/
+	void GenerateBricks();
 private:
 	MainWindow& wnd;
 	Graphics gfx;

@@ -40,7 +40,12 @@ Game::Game(MainWindow& wnd)
 	level(1),
 	escReleased(true)
 {
-	Color c[5] = { {140,140,140}, {0,0,230}, {0,230,0}, {230,0,0}, {230,230,0} };
+	GenerateBricks();
+}
+
+void Game::GenerateBricks()
+{
+	Color c[5] = { { 140,140,140 },{ 0,0,230 },{ 0,230,0 },{ 230,0,0 },{ 230,230,0 } };
 
 	int i = 0;
 	for (int y = 0; y < verticalBricks; y++)
@@ -178,17 +183,7 @@ void Game::UpdateModel(float dt)
 						ball.Reset(pad.GetBallStartPos(), Vec2(0.0f, 0.0f));
 
 						// Code for resetting the blocks
-						Color c[5] = { Colors::Gray, Colors::Blue, Colors::Green, Colors::Red, Colors::Yellow };
-
-						int i = 0;
-						for (int y = 0; y < verticalBricks; y++)
-						{
-							for (int x = 0; x < horizontalBricks; x++)
-							{
-								bricks[i] = Brick(RectF(walls.GetTopLeft() + topPos + Vec2(x * brickWidth, y * brickHeight), brickWidth, brickHeight), c[y]);
-								i++;
-							}
-						}
+						GenerateBricks();
 					}
 				}
 				else
